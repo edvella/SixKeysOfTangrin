@@ -189,7 +189,7 @@ namespace SixKeysOfTangrinTests
         }
 
         [TestMethod]
-        public void PromptsItemChoiceAgainIfIncorrectChoiceNumberIsSelected()
+        public void DumpPromptsItemChoiceAgainIfIncorrectChoiceNumberIsSelected()
         {
             game.Map.ItemInCurrentLocation().Returns(ItemCollection.Nothing);
             threeSlotInventory.Content[0] = 11;
@@ -199,7 +199,7 @@ namespace SixKeysOfTangrinTests
         }
 
         [TestMethod]
-        public void PromptsItemChoiceAgainIfEmptySlotIsChosen()
+        public void DumpPromptsItemChoiceAgainIfEmptySlotIsChosen()
         {
             game.Map.ItemInCurrentLocation().Returns(ItemCollection.Nothing);
             threeSlotInventory.Content[2] = 11;
@@ -216,6 +216,114 @@ namespace SixKeysOfTangrinTests
             inputDevice.ChooseListItem(Arg.Any<string>()).Returns(3);
             threeSlotInventory.Dump();
             threeSlotInventory.Content[2].Should().BeNull();
+        }
+
+        [TestMethod]
+        public void DoesNotLoseTurnWhenSwappingItems()
+        {
+            threeSlotInventory.Swap().Should().BeFalse();
+        }
+
+        [TestMethod]
+        public void CannotSwapHeavyObjects()
+        {
+            game.Map.ItemInCurrentLocation().Returns(5);
+            threeSlotInventory.Swap();
+            outputDevice.Received(1).ShowMessage(ThreeSlotInventory.ObjectTooHeavyText);
+        }
+
+        [TestMethod]
+        public void DisplaysItemsInInventoryForThePlayerToSwap()
+        {
+            game.Map.ItemInCurrentLocation().Returns(ItemCollection.Nothing);
+            threeSlotInventory.Content[0] = 11;
+            threeSlotInventory.Content[1] = 20;
+            threeSlotInventory.Content[2] = 16;
+            inputDevice.ChooseListItem(Arg.Any<string>()).Returns(1);
+            threeSlotInventory.Swap();
+            outputDevice.Received(1).ShowMessage("You hold the following");
+            outputDevice.Received(1).ShowMessage("1. a golden key");
+            outputDevice.Received(1).ShowMessage("2. a French dictionary");
+            outputDevice.Received(1).ShowMessage("3. a length of rope");
+        }
+
+        [TestMethod]
+        public void SwapAttemptShowsErrorIfInventoryIsEmpty()
+        {
+            game.Map.ItemInCurrentLocation().Returns(11);
+            threeSlotInventory.Swap();
+            outputDevice.Received(1).ShowMessage(ThreeSlotInventory.NothingToSwapText);
+        }
+
+        [TestMethod]
+        public void SwapCommandPromptsPlayerToChooseItemToRemoveFromInventory()
+        {
+            game.Map.ItemInCurrentLocation().Returns(ItemCollection.Nothing);
+            threeSlotInventory.Content[0] = 11;
+            inputDevice.ChooseListItem(Arg.Any<string>()).Returns(1);
+            threeSlotInventory.Swap();
+            inputDevice.Received(1).ChooseListItem(ThreeSlotInventory.SwapItemSelectionText);
+        }
+
+        [TestMethod]
+        public void SwapPromptsItemChoiceAgainIfIncorrectChoiceNumberIsSelected()
+        {
+            game.Map.ItemInCurrentLocation().Returns(ItemCollection.Nothing);
+            threeSlotInventory.Content[0] = 11;
+            inputDevice.ChooseListItem(Arg.Any<string>()).Returns(0, 1);
+            threeSlotInventory.Swap();
+            inputDevice.Received(2).ChooseListItem(ThreeSlotInventory.SwapItemSelectionText);
+        }
+
+        [TestMethod]
+        public void SwapPromptsItemChoiceAgainIfEmptySlotIsChosen()
+        {
+            game.Map.ItemInCurrentLocation().Returns(ItemCollection.Nothing);
+            threeSlotInventory.Content[2] = 11;
+            inputDevice.ChooseListItem(Arg.Any<string>()).Returns(2, 3);
+            threeSlotInventory.Swap();
+            inputDevice.Received(2).ChooseListItem(ThreeSlotInventory.SwapItemSelectionText);
+        }
+
+        [TestMethod]
+        public void ChosenInventoryItemIsPlacedInCurrentLocationWhenSwapping()
+        {
+            game.Map.ItemInCurrentLocation().Returns(19);
+            threeSlotInventory.Content[0] = 11;
+            inputDevice.ChooseListItem(Arg.Any<string>()).Returns(1);
+            threeSlotInventory.Swap();
+            game.Map.Received(1).AddItemToCurrentLocation(11);
+        }
+
+        [TestMethod]
+        public void LocationItemIsPlacedInInventoryWhenSwapping()
+        {
+            game.Map.ItemInCurrentLocation().Returns(19);
+            threeSlotInventory.Content[0] = 11;
+            inputDevice.ChooseListItem(Arg.Any<string>()).Returns(1);
+            threeSlotInventory.Swap();
+            threeSlotInventory.Content[0].Should().Be(19);
+        }
+
+        [TestMethod]
+        public void SwappingWithAnEmptyLocationIsAllowed()
+        {
+            game.Map.ItemInCurrentLocation().Returns(ItemCollection.Nothing);
+            threeSlotInventory.Content[0] = 11;
+            inputDevice.ChooseListItem(Arg.Any<string>()).Returns(1);
+            threeSlotInventory.Swap();
+            threeSlotInventory.Content[0].Should().Be(ItemCollection.Nothing);
+            game.Map.Received(1).AddItemToCurrentLocation(11);
+        }
+
+        [TestMethod]
+        public void DisplaysConfirmationMessageWhenSwapSucceeds()
+        {
+            game.Map.ItemInCurrentLocation().Returns(11);
+            threeSlotInventory.Content[0] = 19;
+            inputDevice.ChooseListItem(Arg.Any<string>()).Returns(1);
+            threeSlotInventory.Swap();
+            outputDevice.Received(1).ShowMessage("OK I've now got a golden key");
         }
     }
 }

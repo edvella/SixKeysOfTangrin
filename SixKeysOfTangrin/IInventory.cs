@@ -4,5 +4,6 @@
     {
         bool Dump();
         bool PickUp();
+        bool Swap();
     }
 }

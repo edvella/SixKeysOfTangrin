@@ -142,5 +142,14 @@ namespace SixKeysOfTangrinTests
             game.NextTurn();
             inventory.Received(1).Dump();
         }
+
+        [TestMethod]
+        public void PlayerCanSwapItems()
+        {
+            inputDevice.ReadCommand().Returns(CommandPalette.Swap);
+            inventory.Swap().Returns(true);
+            game.NextTurn();
+            inventory.Received(1).Swap();
+        }
     }
 }

@@ -238,6 +238,9 @@ but he only speaks French";
                     case CommandPalette.Dump:
                         IsTurnOver = inventory.Dump();
                         break;
+                    case CommandPalette.Swap:
+                        IsTurnOver = inventory.Swap();
+                        break;
                     default:
                         outputDevice.ShowMessage(InvalidCommandText);
                         break;

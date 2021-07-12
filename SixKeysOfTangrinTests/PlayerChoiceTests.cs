@@ -151,5 +151,14 @@ namespace SixKeysOfTangrinTests
             game.NextTurn();
             inventory.Received(1).Swap();
         }
+
+        [TestMethod]
+        public void PlayerCanOpenStuff()
+        {
+            inputDevice.ReadCommand().Returns(CommandPalette.Open);
+            inventory.Open().Returns(true);
+            game.NextTurn();
+            inventory.Received(1).Open();
+        }
     }
 }

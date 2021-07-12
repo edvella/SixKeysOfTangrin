@@ -21,15 +21,18 @@ namespace SixKeysOfTangrin
                 var outputDevice = new ConsoleOutputDevice();
                 var randomGenerator = new StandardRandomGenerator();
                 var map = new TangrinMap(randomGenerator, outputDevice);
+                var player = new Player();
+                var suspense = new Suspense();
 
-                    Game game = new(
-                inputDevice,
-                outputDevice,
-                randomGenerator,
-                map,
-                new Suspense(),
-                new Player(),
-                new ThreeSlotInventory(outputDevice, inputDevice, map));
+                Game game = new(
+                    inputDevice,
+                    outputDevice,
+                    randomGenerator,
+                    map,
+                    suspense,
+                    player,
+                    new ThreeSlotInventory(
+                        outputDevice, inputDevice, map, player, suspense));
 
                 game.Start();
             }

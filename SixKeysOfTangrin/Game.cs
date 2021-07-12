@@ -169,7 +169,7 @@ but he only speaks French";
         private void CalculateEnergyLeft()
         {
             if (Map.PlayerLocation == TangrinMap.StartingLocation && IsTideOut())
-                Player.RestoreHealth();
+                Player.RestoreFullHealth();
             else
                 Player.Drain(TideTime);
         }
@@ -240,6 +240,9 @@ but he only speaks French";
                         break;
                     case CommandPalette.Swap:
                         IsTurnOver = inventory.Swap();
+                        break;
+                    case CommandPalette.Open:
+                        IsTurnOver = inventory.Open();
                         break;
                     default:
                         outputDevice.ShowMessage(InvalidCommandText);

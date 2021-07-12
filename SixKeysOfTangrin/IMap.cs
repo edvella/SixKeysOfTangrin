@@ -11,8 +11,8 @@ namespace SixKeysOfTangrin
         int? DestinationLocation(int x, int y);
         void Initialise();
         ItemCollection Items();
-        IEnumerable<int?> JKeyCollection();
-        IEnumerable<int?> KeyCollection();
+        ContainerContent ContainerContent();
+        IEnumerable<int?> Containers();
         string LookCommand();
         void PlaceTwoWayConnection(int x, int y, int destination, bool fixedLocation = false);
         string VisibleItem();
@@ -27,5 +27,6 @@ namespace SixKeysOfTangrin
         bool GoDown();
         void RemoveItemFromCurrentLocation();
         void AddItemToCurrentLocation(int item);
+        string ItemInCurrentLocationDescription();
     }
 }

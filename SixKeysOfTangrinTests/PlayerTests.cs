@@ -28,13 +28,12 @@ namespace SixKeysOfTangrinTests
             player.Energy.Should().BeLessThan(Player.FullEnergy);
         }
 
-        [TestMethod]
-        public void WarnsWhenPlayerIsExhausted()
+        [DataRow(9)]
+        [DataRow(2)]
+        [DataTestMethod]
+        public void WarnsWhenPlayerIsExhausted(int amount)
         {
-            player.Energy = 9;
-            player.EnergyStatus().Should().Be(Player.Exhausted);
-            player.EnergyStatus().Should().NotContain(Player.Died);
-            player.Energy = 2;
+            player.Energy = amount;
             player.EnergyStatus().Should().Be(Player.Exhausted);
             player.EnergyStatus().Should().NotContain(Player.Died);
         }
@@ -47,76 +46,91 @@ namespace SixKeysOfTangrinTests
             player.EnergyStatus().Should().Contain(Player.Died);
         }
 
-        [TestMethod]
-        public void WarnsWhenPlayerIsWeary()
+        [DataRow(10)]
+        [DataRow(19)]
+        [DataTestMethod]
+        public void WarnsWhenPlayerIsWeary(int amount)
         {
-            player.Energy = 10;
+            player.Energy = amount;
             player.EnergyStatus().Should().Be(Player.Weary);
-            player.Energy = 19;
-            player.EnergyStatus().Should().Be(Player.Weary);
         }
 
-        [TestMethod]
-        public void WarnsWhenPlayerIsTired()
+        [DataRow(20)]
+        [DataRow(29)]
+        [DataTestMethod]
+        public void WarnsWhenPlayerIsTired(int amount)
         {
-            player.Energy = 20;
-            player.EnergyStatus().Should().Be(Player.Tired);
-            player.Energy = 29;
+            player.Energy = amount;
             player.EnergyStatus().Should().Be(Player.Tired);
         }
 
-        [TestMethod]
-        public void ShowsWhenPlayerIsStillFit()
+        [DataRow(30)]
+        [DataRow(39)]
+        [DataTestMethod]
+        public void ShowsWhenPlayerIsStillFit(int amount)
         {
-            player.Energy = 30;
+            player.Energy = amount;
             player.EnergyStatus().Should().Be(Player.Peckish);
-            player.Energy = 39;
-            player.EnergyStatus().Should().Be(Player.Peckish);
         }
 
-        [TestMethod]
-        public void DoesNotShowAnyStatusWhenPlayerIsFitButNotSoStrong()
+        [DataRow(40)]
+        [DataRow(49)]
+        [DataTestMethod]
+        public void DoesNotShowAnyStatusWhenPlayerIsFitButNotSoStrong(int amount)
         {
-            player.Energy = 40;
-            player.EnergyStatus().Should().BeNull();
-            player.Energy = 49;
+            player.Energy = amount;
             player.EnergyStatus().Should().BeNull();
         }
 
-        [TestMethod]
-        public void WarnsWhenPlayerBecomesLessStrong()
+        [DataRow(50)]
+        [DataRow(59)]
+        [DataTestMethod]
+        public void WarnsWhenPlayerBecomesLessStrong(int amount)
         {
-            player.Energy = 50;
+            player.Energy = amount;
             player.EnergyStatus().Should().Be(Player.LessStrong);
-            player.Energy = 59;
-            player.EnergyStatus().Should().Be(Player.LessStrong);
         }
 
-        [TestMethod]
-        public void ShowsWhenPlayerIsStillStrongEnough()
+        [DataRow(60)]
+        [DataRow(79)]
+        [DataTestMethod]
+        public void ShowsWhenPlayerIsStillStrongEnough(int amount)
         {
-            player.Energy = 60;
-            player.EnergyStatus().Should().Be(Player.Strong);
-            player.Energy = 79;
+            player.Energy = amount;
             player.EnergyStatus().Should().Be(Player.Strong);
         }
 
-        [TestMethod]
-        public void ShowsWhenPlayerIsAt100PercentEfficiency()
+        [DataRow(80)]
+        [DataRow(89)]
+        [DataTestMethod]
+        public void ShowsWhenPlayerIsAt100PercentEfficiency(int amount)
         {
-            player.Energy = 80;
-            player.EnergyStatus().Should().Be(Player.Efficient);
-            player.Energy = 89;
+            player.Energy = amount;
             player.EnergyStatus().Should().Be(Player.Efficient);
         }
 
-        [TestMethod]
-        public void ShowsWhenPlayerIsAtFullStrength()
+        [DataRow(90)]
+        [DataRow(99)]
+        [DataTestMethod]
+        public void ShowsWhenPlayerIsAtFullStrength(int amount)
         {
-            player.Energy = 90;
+            player.Energy = amount;
             player.EnergyStatus().Should().Be(Player.FullStrength);
-            player.Energy = 99;
-            player.EnergyStatus().Should().Be(Player.FullStrength);
+        }
+
+        [TestMethod]
+        public void PlayerEnergyCanBePartiallyRestored()
+        {
+            player.Restore(60);
+            player.Energy.Should().Be(159);
+        }
+
+        [TestMethod]
+        public void PlayerEnergyCanBeFullyRestored()
+        {
+            player.Energy = 1;
+            player.RestoreFullHealth();
+            player.Energy.Should().Be(Player.FullEnergy);
         }
     }
 }

@@ -126,7 +126,7 @@ namespace SixKeysOfTangrinTests
             game.Map.PlayerLocation = 2;
             game.NextTurn();
             player.Received(1).Drain(Arg.Any<int>());
-            player.DidNotReceive().RestoreHealth();
+            player.DidNotReceive().RestoreFullHealth();
         }
 
         [TestMethod]
@@ -136,7 +136,7 @@ namespace SixKeysOfTangrinTests
             game.NextTurn();
             game.Map.PlayerLocation = TangrinMap.StartingLocation;
             game.NextTurn();
-            player.Received(1).RestoreHealth();
+            player.Received(1).RestoreFullHealth();
         }
 
         [TestMethod]
@@ -146,7 +146,7 @@ namespace SixKeysOfTangrinTests
             ExpireTideTimer();
             game.NextTurn();
             player.Received(1).Drain(Arg.Any<int>());
-            player.DidNotReceive().RestoreHealth();
+            player.DidNotReceive().RestoreFullHealth();
         }
 
         [TestMethod]

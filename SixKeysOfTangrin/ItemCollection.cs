@@ -6,7 +6,10 @@ namespace SixKeysOfTangrin
 {
     public class ItemCollection
     {
-        public const int Nothing = 29;
+        public const int TinOfFood = 7;
+        public const int TinOpener = 19;
+        public const int Treasure = 28;
+        public const int Nothing = 30;
 
         private readonly Random rnd = new(DateTime.Now.Second);
 
@@ -41,7 +44,7 @@ namespace SixKeysOfTangrin
 
         public void PlaceItem(int i, int location)
         {
-            if (!itemLocations.Any(_ => _.HasValue && _.Value == location) && location != 27)
+            if (!itemLocations.Any(_ => _.HasValue && _.Value == location) && location != Treasure)
                 itemLocations[i] = location;
             else
                 PlaceItemAtRandom(i);

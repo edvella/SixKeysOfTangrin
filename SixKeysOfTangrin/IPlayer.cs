@@ -2,8 +2,10 @@
 {
     public interface IPlayer
     {
+        int EnergyLeft();
         string EnergyStatus();
-        void RestoreHealth();
+        void Restore(int amount);
+        void RestoreFullHealth();
         void Drain(int tideTime);
     }
 }

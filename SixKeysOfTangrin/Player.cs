@@ -16,6 +16,11 @@
 
         public int Energy { get; set; } = FullEnergy;
 
+        public int EnergyLeft()
+        {
+            return Energy;
+        }
+
         public string EnergyStatus()
         {
             if (Energy < 2) return $"{Exhausted}\n{Died}";
@@ -30,14 +35,20 @@
 
             return FullStrength;
         }
+        public void Restore(int amount)
+        {
+            Energy += amount;
+        }
 
-        public void RestoreHealth()
+        public void RestoreFullHealth()
         {
             Energy = FullEnergy;
         }
+
         public void Drain(int tideTime)
         {
             Energy -= (410 - tideTime) / 95;
         }
+
     }
 }

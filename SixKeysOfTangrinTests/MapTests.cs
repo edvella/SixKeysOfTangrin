@@ -154,20 +154,20 @@ namespace SixKeysOfTangrinTests
         }
 
         [TestMethod]
-        public void SixKeysArePlacedInLocations0To6()
+        public void SixKeysAreMatchedUpWithLockedContainers()
         {
             map.Initialise();
-            foreach (int? keyLocation in map.KeyCollection())
+            foreach (int? keyLocation in map.Containers())
             {
                 keyLocation.Should().BeInRange(0, 6);
             }
         }
 
         [TestMethod]
-        public void SixJKeysArePlacedInLocations10To16()
+        public void SixKeysArePlacedInsideContainers()
         {
             map.Initialise();
-            var keyLocations = map.JKeyCollection();
+            var keyLocations = map.ContainerContent().ItemLocations();
             foreach (int? keyLocation in keyLocations)
             {
                 if (!keyLocation.Equals(keyLocations.ElementAt(5)))
@@ -176,10 +176,10 @@ namespace SixKeysOfTangrinTests
         }
 
         [TestMethod]
-        public void JKeyWithInitialsIsAlwaysInOvalCaveWithSmoothWalls()
+        public void TreasureIsAlwaysInLastContainer()
         {
             map.Initialise();
-            map.JKeyCollection().ElementAt(5).Should().Be(28);
+            map.ContainerContent().ItemLocations().ElementAt(5).Should().Be(ItemCollection.Treasure);
         }
 
         [TestMethod]
@@ -190,12 +190,12 @@ namespace SixKeysOfTangrinTests
         }
 
         [TestMethod]
-        public void NoNonJKeyItemIsPlacedInOvalCaveWithSmoothWalls()
+        public void TreasureCannotBeFoundLyingAround()
         {
             map.Initialise();
             foreach (int? itemLocation in map.Items().ItemLocations())
             {
-                itemLocation.Should().NotBe(27);
+                itemLocation.Should().NotBe(ItemCollection.Treasure);
             }
         }
 
@@ -399,7 +399,7 @@ namespace SixKeysOfTangrinTests
             map.ItemInCurrentLocation().Should().Be(12);
         }
 
-        // WIP: 3300
+        // WIP: 2726
 
         // H(1..3) set to 0
         // visible item suspence not in correct spot
@@ -408,21 +408,21 @@ namespace SixKeysOfTangrinTests
         // 4000 - 4060 done
         // 9000 - 9090 done, but end game when player dies
 
-        // 2515 - 2740: Open
+        // 2515 - 2740: Open        done
         // 2805 - 2880: Pick up     done
-        // 2910 - 2992: Swap
+        // 2910 - 2992: Swap        done
         // 3000: End                done
         // 3110 - 3180: Dump        done
         // 3310 - 3500: Movement  3300 - 3410 done
 
-        // EN Energy?
-        // TI Time left?
+        // EN Energy
+        // TI Time left
         // N 30 Number of Locations
         // N(30) locations (used to temporarily keep track of objects during creation)
         // H(3) Inventory
         // I(6) Key containers
-        // J(6) Keys
-        // G(30)
+        // J(6) Container content
+        // G(30) Location items
         // P$(30) Location descriptions
         // C(30, 6) Cave exits
         // S$(30) location descriptions

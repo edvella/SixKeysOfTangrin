@@ -20,11 +20,11 @@ namespace SixKeysOfTangrin
         private readonly IRandomGenerator rnd;
         private readonly IOutputDevice outputDevice;
 
-        private readonly KeyCollection keyCollection = new();
-        public IEnumerable<int?> KeyCollection() { return keyCollection.ItemLocations(); }
+        private readonly Containers containers = new();
+        public IEnumerable<int?> Containers() { return containers.ItemLocations(); }
 
-        private readonly JKeyCollection jkeyCollection = new();
-        public IEnumerable<int?> JKeyCollection() { return jkeyCollection.ItemLocations(); }
+        private readonly ContainerContent containerContent = new();
+        public ContainerContent ContainerContent() { return containerContent; }
 
         public readonly ItemCollection itemCollection = new();
         public ItemCollection Items() { return itemCollection; }
@@ -67,8 +67,8 @@ namespace SixKeysOfTangrin
 
             AddAtLeastOneConnectionPerLocation();
 
-            keyCollection.ScatterAroundMap();
-            jkeyCollection.ScatterAroundMap();
+            containers.ScatterAroundMap();
+            containerContent.ScatterAroundMap();
             itemCollection.ScatterAroundMap();
 
             PlayerLocation = StartingLocation;
@@ -204,10 +204,10 @@ namespace SixKeysOfTangrin
             "a long knife",
             "a comfy chair",
             "a pair of dentures",
-            "THE TREASURE", //"a rock from STAR TREK"
-            "a pile of radio components",
-            "NOTHING", //"a gun"
-            "a packet of playing cards",
+            "a rock from STAR TREK",
+            "THE TREASURE", //"a pile of radio components",
+            "a gun",
+            "NOTHING", //"a packet of playing cards",
             "A huge shell"
         };
 
@@ -228,7 +228,7 @@ namespace SixKeysOfTangrin
             return $"{VisibleItemLocation()} is {ItemInCurrentLocationDescription()}.";
         }
 
-        private string ItemInCurrentLocationDescription()
+        public string ItemInCurrentLocationDescription()
         {
             return items[ItemInCurrentLocation()];
         }

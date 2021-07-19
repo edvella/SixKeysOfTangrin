@@ -1,11 +1,9 @@
 ﻿using Edvella.Devices;
 using SixKeysOfTangrin.Effects;
-using System;
-using System.Threading.Tasks;
 
 namespace SixKeysOfTangrin
 {
-    public class Game
+    public class Game : IGame
     {
         public const string Title = "The 6 Keys of Tangrin";
         public const string OfferInstructionsText = "Do you need instructions?";
@@ -18,7 +16,7 @@ The house lies in an area known as Smuggler's Den and the
 townfolk will tell stories of clever smugglers hiding their
 wares in the maze of caves around the coastline.";
         public const string TideIsInText = "Tide is in";
-        public const string PlayerCarriedAwayText = 
+        public const string PlayerCarriedAwayText =
             @"Sploosh!!!
 Tide's in! - You are carried
 to some deep cave.";
@@ -72,7 +70,7 @@ but he only speaks French";
         private bool HasPlayerWon { get; set; }
 
         public Game(
-            IInputDevice inputDevice, 
+            IInputDevice inputDevice,
             IOutputDevice outputDevice,
             IRandomGenerator randomGenerator,
             IMap map,

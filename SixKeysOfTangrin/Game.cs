@@ -22,6 +22,7 @@ wares in the maze of caves around the coastline.";
             @"Sploosh!!!
 Tide's in! - You are carried
 to some deep cave.";
+        public const string PlayAgainText = "Hit any key for next game";
 
         public const int TideOutDuration = 200;
 
@@ -67,7 +68,8 @@ but he only speaks French";
         private readonly IInventory inventory;
 
         public bool IsEndTriggered { get; private set; }
-        public bool IsTurnOver { get; set; }
+        private bool IsTurnOver { get; set; }
+        private bool HasPlayerWon { get; set; }
 
         public Game(
             IInputDevice inputDevice, 
@@ -89,15 +91,19 @@ but he only speaks French";
 
         public void Start()
         {
-            outputDevice.Clear();
-            ShowTitle();
-            OfferInstructions();
-            Map.Initialise();
+            while (!IsEndTriggered)
+            {
+                HasPlayerWon = false;
+                outputDevice.Clear();
+                ShowTitle();
+                OfferInstructions();
+                Map.Initialise();
 
-            outputDevice.Clear();
+                outputDevice.Clear();
 
-            while(!IsEndTriggered)
-                NextTurn();
+                while (!IsEndTriggered && !HasPlayerWon)
+                    NextTurn();
+            }
         }
 
         public void ShowTitle()
@@ -212,21 +218,27 @@ but he only speaks French";
                 {
                     case CommandPalette.North:
                         IsTurnOver = Map.GoNorth();
+                        CheckWinningCondition();
                         break;
                     case CommandPalette.East:
                         IsTurnOver = Map.GoEast();
+                        CheckWinningCondition();
                         break;
                     case CommandPalette.Up:
                         IsTurnOver = Map.GoUp();
+                        CheckWinningCondition();
                         break;
                     case CommandPalette.South:
                         IsTurnOver = Map.GoSouth();
+                        CheckWinningCondition();
                         break;
                     case CommandPalette.West:
                         IsTurnOver = Map.GoWest();
+                        CheckWinningCondition();
                         break;
                     case CommandPalette.Down:
                         IsTurnOver = Map.GoDown();
+                        CheckWinningCondition();
                         break;
                     case CommandPalette.End:
                         IsEndTriggered = true;
@@ -248,6 +260,19 @@ but he only speaks French";
                         outputDevice.ShowMessage(InvalidCommandText);
                         break;
                 }
+            }
+        }
+
+        private void CheckWinningCondition()
+        {
+            if (IsTideOut()
+                && Map.PlayerLocation == TangrinMap.StartingLocation
+                && inventory.IsHolding(ItemCollection.Treasure))
+            {
+                outputDevice.ShowMessage(TangrinMap.GotOutWithTreasureText);
+                outputDevice.ShowMessage(PlayAgainText);
+                inputDevice.WaitForPlayerToContinue();
+                HasPlayerWon = true;
             }
         }
     }

@@ -6,5 +6,6 @@
         bool PickUp();
         bool Swap();
         bool Open();
+        bool IsHolding(int item);
     }
 }

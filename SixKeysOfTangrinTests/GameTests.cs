@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using Edvella.Devices;
+using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
 using SixKeysOfTangrin;
@@ -231,6 +232,64 @@ namespace SixKeysOfTangrinTests
         {
             game.NextTurn();
             inputDevice.Received(1).ReadCommand();
+        }
+
+        [TestMethod]
+        public void WinsGameWhenHoldingTreasureAtEntrance()
+        {
+            SetUpWinningCondition();
+
+            game.NextTurn();
+            outputDevice.Received(1).ShowMessage(TangrinMap.GotOutWithTreasureText);
+        }
+
+        private void SetUpWinningCondition()
+        {
+            UseGameWithMockedMap();
+            game.Map.GoNorth().Returns(true);
+            game.Map.PlayerLocation.Returns(TangrinMap.StartingLocation);
+            inventory.IsHolding(ItemCollection.Treasure).Returns(true);
+            inputDevice.ReadCommand().Returns(CommandPalette.North);
+        }
+
+        [TestMethod]
+        public void DoesNotWinGameIfNotHoldingTreasure()
+        {
+            SetUpWinningCondition();
+            inventory.IsHolding(ItemCollection.Treasure).Returns(false);
+
+            game.NextTurn();
+            outputDevice.DidNotReceive().ShowMessage(TangrinMap.GotOutWithTreasureText);
+        }
+
+        [TestMethod]
+        public void DoesNotWinGameIfPlayerIsNotInStartingLocation()
+        {
+            SetUpWinningCondition();
+            game.Map.PlayerLocation.Returns(5);
+
+            game.NextTurn();
+            outputDevice.DidNotReceive().ShowMessage(TangrinMap.GotOutWithTreasureText);
+        }
+
+        [TestMethod]
+        public void DoesNotWinGameIfTideIsIn()
+        {
+            SetUpWinningCondition();
+            game.TideTime = -1;
+
+            game.NextTurn();
+            outputDevice.DidNotReceive().ShowMessage(TangrinMap.GotOutWithTreasureText);
+        }
+
+        [TestMethod]
+        public void PromptsPlayerForAnotherGoAfterWinning()
+        {
+            SetUpWinningCondition();
+            
+            game.NextTurn();
+            outputDevice.Received(1).ShowMessage(Game.PlayAgainText);
+            inputDevice.Received(1).WaitForPlayerToContinue();
         }
     }
 }

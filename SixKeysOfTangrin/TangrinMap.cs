@@ -41,6 +41,7 @@ namespace SixKeysOfTangrin
         public const string ReflectingInYourTorchlightText = "Reflecting in your torchlight";
         public const string ExitsText = "You can now go : ";
         public const string InvalidDirectionText = "Can't go that way";
+        public const string GotOutWithTreasureText = "You got out with the treasure.";
 
         public const string North = "north ";
         public const string East = "east ";

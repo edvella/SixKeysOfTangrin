@@ -1,5 +1,4 @@
-﻿using Sentry;
-using System;
+﻿using System;
 using System.Runtime.Serialization;
 
 namespace SixKeysOfTangrin
@@ -9,7 +8,6 @@ namespace SixKeysOfTangrin
     {
         public ConnectionOutOfMapException() : base("Items cannot be placed out of the map")
         {
-            SentrySdk.CaptureMessage("Tried to place an item outside of map");
         }
 
         protected ConnectionOutOfMapException(

@@ -49,7 +49,11 @@ namespace Edvella.Devices.Console
 
         private static string UserInput()
         {
-            return System.Console.ReadLine().Substring(0, 2).ToUpperInvariant();
+            var command = System.Console.ReadLine();
+            if (command.Length >= 2)
+                return command.Substring(0, 2).ToUpperInvariant();
+
+            return command;
         }
 
         public int ChooseListItem(string text)

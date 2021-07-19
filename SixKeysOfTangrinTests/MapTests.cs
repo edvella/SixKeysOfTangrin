@@ -1,3 +1,4 @@
+using Edvella.Devices;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;

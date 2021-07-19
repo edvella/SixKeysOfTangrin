@@ -198,7 +198,7 @@ namespace SixKeysOfTangrin
                     $"{CannotOpenText}{map.ItemInCurrentLocationDescription()}?");
             else if (map.ItemInCurrentLocation() == ItemCollection.TinOfFood)
             {
-                if (IsInInventory(ItemCollection.TinOpener))
+                if (IsHolding(ItemCollection.TinOpener))
                 {
                     outputdevice.ShowMessage(EatFoodText);
                     player.Restore(60);
@@ -291,7 +291,7 @@ namespace SixKeysOfTangrin
             return containers.ElementAt(Content[slot].Value - 10);
         }
 
-        private bool IsInInventory(int item)
+        public bool IsHolding(int item)
         {
             return Content.Any(_ => _.HasValue && _.Value == item);
         }

@@ -153,7 +153,7 @@ but he only speaks French";
             CalculateEnergyLeft();
             if (TideTime < -100) TideTime = TideOutDuration;
             outputDevice.ShowMessage(Map.LookCommand());
-            outputDevice.ShowMessage(Map.VisibleItem());
+            Map.VisibleItem();
             suspense.Delay(1000);
 
             TangrinScene();

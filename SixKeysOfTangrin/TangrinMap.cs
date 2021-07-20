@@ -212,21 +212,25 @@ namespace SixKeysOfTangrin
             "A huge shell"
         };
 
-        public string VisibleItem()
+        public void VisibleItem()
         {
-            if (rnd.NextDouble(1) > .95)
+            if (ItemInCurrentLocation() != ItemCollection.Nothing)
             {
-                for (var i = 0; i < LocationCount; i++)
+                if (rnd.NextDouble(1) > .95)
                 {
-                    if (Items().ItemLocations().ElementAt(i) == ItemCollection.Nothing)
+                    for (var i = 0; i < LocationCount; i++)
                     {
-                        Items().UpdateItem(PlayerLocation, 6);
-                        break;
+                        if (Items().ItemLocations().ElementAt(i) == ItemCollection.Nothing)
+                        {
+                            Items().UpdateItem(PlayerLocation, 6);
+                            break;
+                        }
                     }
                 }
-            }
 
-            return $"{VisibleItemLocation()} is {ItemInCurrentLocationDescription()}.";
+                outputDevice.ShowMessage(
+                    $"{VisibleItemLocation()} is {ItemInCurrentLocationDescription()}.");
+            }
         }
 
         public string ItemInCurrentLocationDescription()

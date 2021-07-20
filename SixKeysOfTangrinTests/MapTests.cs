@@ -218,35 +218,67 @@ namespace SixKeysOfTangrinTests
         public void ItemsCanRandomlyBeNextToARock()
         {
             InitialiseMap();
+            map.itemCollection.UpdateItem(0, 20);
             mockRandom.NextDouble(1.0).Returns(0.29);
-            map.VisibleItem().Should().StartWith(TangrinMap.NextToARockText);
+
+            map.VisibleItem();
+
+            outputDevice.Received(1)
+                .ShowMessage("Next to a rock is a French dictionary.");
         }
 
         [TestMethod]
         public void ItemsCanRandomlyBeAgainstAWall()
         {
             InitialiseMap();
+            map.itemCollection.UpdateItem(0, 20);
             mockRandom.NextDouble(1.0).Returns(0.3);
             mockRandom.NextDouble(2.0).Returns(0.29);
-            map.VisibleItem().Should().StartWith(TangrinMap.AgainstAWallText);
+
+            map.VisibleItem();
+
+            outputDevice.Received(1)
+                .ShowMessage("Against a wall is a French dictionary.");
         }
 
         [TestMethod]
         public void ItemsCanRandomlyBeOnTheGround()
         {
             InitialiseMap();
+            map.itemCollection.UpdateItem(0, 20);
             mockRandom.NextDouble(1.0).Returns(0.3);
             mockRandom.NextDouble(2.0).Returns(0.3, 0.29);
-            map.VisibleItem().Should().StartWith(TangrinMap.OnTheGroundText);
+
+            map.VisibleItem();
+
+            outputDevice.Received(1)
+                .ShowMessage("On the ground is a French dictionary.");
         }
 
         [TestMethod]
         public void ItemsCanRandomlyBeReflectingInYourTorchlight()
         {
             InitialiseMap();
+            map.itemCollection.UpdateItem(0, 20);
             mockRandom.NextDouble(1.0).Returns(0.3);
             mockRandom.NextDouble(2.0).Returns(0.3, 0.3);
-            map.VisibleItem().Should().StartWith(TangrinMap.ReflectingInYourTorchlightText);
+
+            map.VisibleItem();
+
+            outputDevice.Received(1)
+                .ShowMessage("Reflecting in your torchlight is a French dictionary.");
+        }
+
+        [TestMethod]
+        public void NoItemDescriptionIsShownForEmptyLocations()
+        {
+            InitialiseMap();
+            map.itemCollection.UpdateItem(0, 30);
+
+            map.VisibleItem();
+
+            outputDevice.DidNotReceive()
+                .ShowMessage("Next to a rock is NOTHING.");
         }
 
         private void InitialiseMap()
@@ -414,7 +446,7 @@ namespace SixKeysOfTangrinTests
         // 2910 - 2992: Swap        done
         // 3000: End                done
         // 3110 - 3180: Dump        done
-        // 3310 - 3500: Movement  3300 - 3410 done
+        // 3310 - 3500: Movement    done
 
         // EN Energy
         // TI Time left

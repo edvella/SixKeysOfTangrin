@@ -15,7 +15,7 @@ namespace SixKeysOfTangrin
         IEnumerable<int?> Containers();
         string LookCommand();
         void PlaceTwoWayConnection(int x, int y, int destination, bool fixedLocation = false);
-        string VisibleItem();
+        void VisibleItem();
         string ItemDescription(int index);
         int ItemInCurrentLocation();
         string CurrentExits();

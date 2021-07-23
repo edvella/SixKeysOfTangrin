@@ -7,5 +7,6 @@
         void Restore(int amount);
         void RestoreFullHealth();
         void Drain(int tideTime);
+        bool IsDead();
     }
 }

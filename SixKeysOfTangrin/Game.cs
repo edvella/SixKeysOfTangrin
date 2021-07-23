@@ -211,53 +211,66 @@ but he only speaks French";
                 outputDevice.ShowMessage(CommandsText);
                 outputDevice.ShowMessage(Player.EnergyStatus());
 
-                var choice = inputDevice.ReadCommand();
-                switch (choice)
+                if (Player.IsDead())
                 {
-                    case CommandPalette.North:
-                        IsTurnOver = Map.GoNorth();
-                        CheckWinningCondition();
-                        break;
-                    case CommandPalette.East:
-                        IsTurnOver = Map.GoEast();
-                        CheckWinningCondition();
-                        break;
-                    case CommandPalette.Up:
-                        IsTurnOver = Map.GoUp();
-                        CheckWinningCondition();
-                        break;
-                    case CommandPalette.South:
-                        IsTurnOver = Map.GoSouth();
-                        CheckWinningCondition();
-                        break;
-                    case CommandPalette.West:
-                        IsTurnOver = Map.GoWest();
-                        CheckWinningCondition();
-                        break;
-                    case CommandPalette.Down:
-                        IsTurnOver = Map.GoDown();
-                        CheckWinningCondition();
-                        break;
-                    case CommandPalette.End:
-                        IsEndTriggered = true;
-                        IsTurnOver = true;
-                        break;
-                    case CommandPalette.PickUp:
-                        IsTurnOver = inventory.PickUp();
-                        break;
-                    case CommandPalette.Dump:
-                        IsTurnOver = inventory.Dump();
-                        break;
-                    case CommandPalette.Swap:
-                        IsTurnOver = inventory.Swap();
-                        break;
-                    case CommandPalette.Open:
-                        IsTurnOver = inventory.Open();
-                        break;
-                    default:
-                        outputDevice.ShowMessage(InvalidCommandText);
-                        break;
+                    IsEndTriggered = true;
+                    IsTurnOver = true;
                 }
+                else
+                {
+                    ProcessCommand();
+                }
+            }
+        }
+
+        private void ProcessCommand()
+        {
+            var choice = inputDevice.ReadCommand();
+            switch (choice)
+            {
+                case CommandPalette.North:
+                    IsTurnOver = Map.GoNorth();
+                    CheckWinningCondition();
+                    break;
+                case CommandPalette.East:
+                    IsTurnOver = Map.GoEast();
+                    CheckWinningCondition();
+                    break;
+                case CommandPalette.Up:
+                    IsTurnOver = Map.GoUp();
+                    CheckWinningCondition();
+                    break;
+                case CommandPalette.South:
+                    IsTurnOver = Map.GoSouth();
+                    CheckWinningCondition();
+                    break;
+                case CommandPalette.West:
+                    IsTurnOver = Map.GoWest();
+                    CheckWinningCondition();
+                    break;
+                case CommandPalette.Down:
+                    IsTurnOver = Map.GoDown();
+                    CheckWinningCondition();
+                    break;
+                case CommandPalette.End:
+                    IsEndTriggered = true;
+                    IsTurnOver = true;
+                    break;
+                case CommandPalette.PickUp:
+                    IsTurnOver = inventory.PickUp();
+                    break;
+                case CommandPalette.Dump:
+                    IsTurnOver = inventory.Dump();
+                    break;
+                case CommandPalette.Swap:
+                    IsTurnOver = inventory.Swap();
+                    break;
+                case CommandPalette.Open:
+                    IsTurnOver = inventory.Open();
+                    break;
+                default:
+                    outputDevice.ShowMessage(InvalidCommandText);
+                    break;
             }
         }
 

@@ -291,5 +291,13 @@ namespace SixKeysOfTangrinTests
             outputDevice.Received(1).ShowMessage(Game.PlayAgainText);
             inputDevice.Received(1).WaitForPlayerToContinue();
         }
+
+        [TestMethod]
+        public void EndsGameWhenPlayerDies()
+        {
+            game.Player.IsDead().Returns(true);
+            game.NextTurn();
+            game.IsEndTriggered.Should().BeTrue();
+        }
     }
 }

@@ -23,7 +23,7 @@
 
         public string EnergyStatus()
         {
-            if (Energy < 2) return $"{Exhausted}\n{Died}";
+            if (IsDead()) return $"{Exhausted}\n{Died}";
             if (Energy < 10) return Exhausted;
             if (Energy < 20) return Weary;
             if (Energy < 30) return Tired;
@@ -35,6 +35,7 @@
 
             return FullStrength;
         }
+
         public void Restore(int amount)
         {
             Energy += amount;
@@ -50,5 +51,9 @@
             Energy -= (410 - tideTime) / 95;
         }
 
+        public bool IsDead()
+        {
+            return Energy < 2;
+        }
     }
 }

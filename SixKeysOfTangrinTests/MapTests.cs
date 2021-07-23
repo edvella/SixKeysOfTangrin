@@ -432,21 +432,10 @@ namespace SixKeysOfTangrinTests
             map.ItemInCurrentLocation().Should().Be(12);
         }
 
-        // WIP: 2726
-
         // H(1..3) set to 0
-        // visible item suspence not in correct spot
-        // skipped 2019
+        // visible item suspense not in correct spot
         // Tangrin gosub 5700 check on line 2474
-        // 4000 - 4060 done
         // 9000 - 9090 done, but end game when player dies
-
-        // 2515 - 2740: Open        done
-        // 2805 - 2880: Pick up     done
-        // 2910 - 2992: Swap        done
-        // 3000: End                done
-        // 3110 - 3180: Dump        done
-        // 3310 - 3500: Movement    done
 
         // EN Energy
         // TI Time left

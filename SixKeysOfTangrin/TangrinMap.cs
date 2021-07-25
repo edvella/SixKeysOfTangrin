@@ -176,7 +176,7 @@ namespace SixKeysOfTangrin
             "You pass through an old school room, still with desks."
         };
 
-        public readonly string[] items =
+        public static readonly string[] items =
         {
             "a small red box",
             "a wooden cupboard",

@@ -434,8 +434,8 @@ namespace SixKeysOfTangrinTests
 
         // H(1..3) set to 0
         // visible item suspense not in correct spot
-        // Tangrin gosub 5700 check on line 2474
-        // 9000 - 9090 done, but end game when player dies
+        // Tangrin 5770-5810
+        // 9000 - 9090 done
 
         // EN Energy
         // TI Time left

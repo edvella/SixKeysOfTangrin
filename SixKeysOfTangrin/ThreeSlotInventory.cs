@@ -295,5 +295,29 @@ namespace SixKeysOfTangrin
         {
             return Content.Any(_ => _.HasValue && _.Value == item);
         }
+
+        public int Item(int slot)
+        {
+            return Content[slot].Value;
+        }
+
+        public int? Index(int item)
+        {
+            for (var i = 0; i < Size(); i++)
+                if (Content[i] == item)
+                    return i;
+
+            return null;
+        }
+
+        public int Size()
+        {
+            return Content.Length;
+        }
+
+        public void Remove(int index)
+        {
+            Content[index] = null;
+        }
     }
 }

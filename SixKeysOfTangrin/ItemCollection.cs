@@ -8,6 +8,7 @@ namespace SixKeysOfTangrin
     {
         public const int TinOfFood = 7;
         public const int TinOpener = 19;
+        public const int Dictionary = 20;
         public const int Treasure = 28;
         public const int Nothing = 30;
 

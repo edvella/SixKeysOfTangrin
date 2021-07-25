@@ -47,13 +47,20 @@ Should the need arise that is!";
         public const string MeetTangrinText =
             @"You meet up with the ghost of Tangrin who can take you out,
 but he only speaks French";
+        public const string NoDictionaryText = "Unfortunately, you ne comprends pas.";
+        public const string HoldingDictionaryText = 
+            "As you have the dictionary you can talk to him.";
+        public const string TeleportText =
+            "Entrez oui pour retourner à la grotte - dit-il";
+        public const string TangrinStealsText = 
+            "However the fellow is un ratbag and steals {0} from you";
+        private const string TangrinThanksText = "MERCI BIEN!!";
 
         public const string CommandsText =
             "Type in: open, pickup, dump, swap, end, north, south, east or west.";
 
         public const string InvalidCommandText =
             "Don't understand your banter, squadron leader!";
-
         private readonly IInputDevice inputDevice;
 
         private readonly IOutputDevice outputDevice;
@@ -162,12 +169,50 @@ but he only speaks French";
 
         private void TangrinScene()
         {
-            if (rnd.NextDouble() > .9858)
+            if (rnd.NextDouble() > .9857)
             {
                 outputDevice.ShowMessage(MeetTangrinText);
                 suspense.Delay(4000);
                 outputDevice.Clear();
+
+                if (inventory.IsHolding(ItemCollection.Dictionary))
+                {
+                    outputDevice.ShowMessage(HoldingDictionaryText);
+                    if (TangrinOfferAccepted())
+                        Map.PlayerLocation = TangrinMap.StartingLocation;
+
+                    if (rnd.NextDouble() <= .3)
+                    {
+                        int slot;
+                        if (inventory.IsHolding(ItemCollection.Treasure))
+                        {
+                            slot = inventory.Index(ItemCollection.Treasure).Value;
+                            Map.Items().UpdateItem(
+                                rnd.Next(TangrinMap.Locations),
+                                ItemCollection.Treasure);
+                        }
+                        else
+                            slot = rnd.Next(inventory.Size());
+
+                        outputDevice.ShowMessage(
+                            string.Format(
+                                TangrinStealsText, 
+                                Map.ItemDescription(inventory.Item(slot))));
+                        inventory.Remove(slot);
+                        suspense.Delay(1000);
+                        outputDevice.ShowMessage(TangrinThanksText);
+                    }
+                }
+                else
+                {
+                    outputDevice.ShowMessage(NoDictionaryText);
+                }
             }
+        }
+
+        private bool TangrinOfferAccepted()
+        {
+            return inputDevice.YesNoPrompt(TeleportText) == YesNo.Yes;
         }
 
         private void CalculateEnergyLeft()

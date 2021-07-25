@@ -26,6 +26,13 @@ namespace SixKeysOfTangrinTests
 
             inputDevice.ReadCommand().Returns(CommandPalette.End);
 
+            UseGameWithTangrinMap();
+
+            game.Map.Initialise();
+        }
+
+        protected void UseGameWithTangrinMap()
+        {
             game = new Game(
                 inputDevice,
                 outputDevice,
@@ -34,8 +41,6 @@ namespace SixKeysOfTangrinTests
                 suspense,
                 player,
                 inventory);
-
-            game.Map.Initialise();
         }
 
         protected IMap MapInstance()

@@ -27,4 +27,4 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: SixKeysOfTangrinWindows
-        path: /**/SixKeysOfTangrin/bin/Release/net5.0/publish/
+        path: D:\a\SixKeysOfTangrin\SixKeysOfTangrin\SixKeysOfTangrin\bin\Release\net5.0\publish\

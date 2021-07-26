@@ -8,7 +8,7 @@ This time I decided to go way back to my first [microcomputer](https://en.wikipe
 
 Before magazines had cover disks, we used to have printed code listings that we had to type in exactly (hoping that there were no errors from the printer) so that we could get some fun playing whatever game it was. But soon I realised that the fun was in the coding and debugging process itself, but anyway on page 18 of this issue was the listing for a game called The 6 Keys of Tangrin by G.Phillips.
 
-And then that's when I decided to use this as an example to talk to my colleagues about TDD. My intention at first was to have a story to tell whilst I was trying to explain TDD. It was a bit tough at first as I tried to understand the original code and convert it into my requirements, but then carried on after the program started shaping up into working code. The game is not complete yet. It will also need some love and refactoring after the code is feature complete, but in the meantine I am making it available here.
+And then that's when I decided to use this as an example to talk to my colleagues about TDD. My intention at first was to have a story to tell whilst I was trying to explain TDD. It was a bit tough at first as I tried to understand the original code and convert it into my requirements, but then carried on after the program started shaping up into working code. The game is now feature-complete, but there are some things which need to be ironed out. Feel free to report any issues that you find.
 
 The code here is in C#. Take a look around if you are curious (about history, the game, and TDD). The original game was written in BASIC and the following is a quote from the mag.
 

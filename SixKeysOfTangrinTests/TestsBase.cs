@@ -60,5 +60,17 @@ namespace SixKeysOfTangrinTests
                 player,
                 inventory);
         }
+
+        // EN Energy
+        // TI Time left
+        // N 30 Number of Locations
+        // N(30) locations (used to temporarily keep track of objects during creation)
+        // H(3) Inventory
+        // I(6) Key containers
+        // J(6) Container content
+        // G(30) Location items
+        // P$(30) Location descriptions
+        // C(30, 6) Cave exits
+        // S$(30) location descriptions
     }
 }

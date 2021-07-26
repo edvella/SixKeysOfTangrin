@@ -431,22 +431,5 @@ namespace SixKeysOfTangrinTests
             map.AddItemToCurrentLocation(12);
             map.ItemInCurrentLocation().Should().Be(12);
         }
-
-        // H(1..3) set to 0
-        // visible item suspense not in correct spot
-        // Tangrin 5770-5810
-        // 9000 - 9090 done
-
-        // EN Energy
-        // TI Time left
-        // N 30 Number of Locations
-        // N(30) locations (used to temporarily keep track of objects during creation)
-        // H(3) Inventory
-        // I(6) Key containers
-        // J(6) Container content
-        // G(30) Location items
-        // P$(30) Location descriptions
-        // C(30, 6) Cave exits
-        // S$(30) location descriptions
     }
 }

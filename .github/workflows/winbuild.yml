@@ -23,16 +23,15 @@ jobs:
       - name: Test
         run: dotnet test --no-build --verbosity normal --configuration Release
       - name: Publish
-        run: dotnet publish --configuration Release
-      #- name: Upload Build Artifact
-      #  uses: actions/upload-artifact@v2
-      #  with:
-      #    name: SixKeysOfTangrinWindows
-      #    path: D:\a\SixKeysOfTangrin\SixKeysOfTangrin\SixKeysOfTangrin\bin\Release\net5.0\publish\
+        run: dotnet publish --configuration Release --no-build --no-restore
+      - uses: papeloto/action-zip@v1
+        with:
+          files: D:\a\SixKeysOfTangrin\SixKeysOfTangrin\SixKeysOfTangrin\bin\Release\net5.0\publish\
+          dest: SixKeysOfTangrin.zip
       - name: Release
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: false
           files: |
-            D:\a\SixKeysOfTangrin\SixKeysOfTangrin\SixKeysOfTangrin\bin\Release\net5.0\publish\*.zip
+            ${{ github.workspace }}/SixKeysOfTangrin.zip

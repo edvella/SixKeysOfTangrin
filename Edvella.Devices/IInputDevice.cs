@@ -1,11 +1,10 @@
-﻿namespace Edvella.Devices
+﻿namespace Edvella.Devices;
+
+public interface IInputDevice
 {
-    public interface IInputDevice
-    {
-        YesNo YesNoPrompt(string text);
-        string ContinueInstructions();
-        void WaitForPlayerToContinue();
-        CommandPalette ReadCommand();
-        int ChooseListItem(string text);
-    }
+    YesNo YesNoPrompt(string text);
+    string ContinueInstructions();
+    void WaitForPlayerToContinue();
+    CommandPalette ReadCommand();
+    int ChooseListItem(string text);
 }

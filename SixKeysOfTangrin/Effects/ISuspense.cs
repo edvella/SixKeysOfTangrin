@@ -1,9 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿namespace SixKeysOfTangrin.Effects;
 
-namespace SixKeysOfTangrin.Effects
+public interface ISuspense
 {
-    public interface ISuspense
-    {
-        void Delay(int millisecods);
-    }
+    void Delay(int millisecods);
 }

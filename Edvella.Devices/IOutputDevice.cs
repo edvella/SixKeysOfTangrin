@@ -1,9 +1,8 @@
-﻿namespace Edvella.Devices
+﻿namespace Edvella.Devices;
+
+public interface IOutputDevice
 {
-    public interface IOutputDevice
-    {
-        void ShowMessage(string text);
-        void ShowTitle(string title);
-        void Clear();
-    }
+    void ShowMessage(string text);
+    void ShowTitle(string title);
+    void Clear();
 }

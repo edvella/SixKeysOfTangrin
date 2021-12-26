@@ -1,18 +1,17 @@
-﻿namespace Edvella.Devices
+﻿namespace Edvella.Devices;
+
+public enum CommandPalette
 {
-    public enum CommandPalette
-    {
-        InvalidCommand,
-        Open,
-        PickUp,
-        Dump,
-        Swap,
-        End,
-        North,
-        South,
-        East,
-        West,
-        Up,
-        Down
-    }
+    InvalidCommand,
+    Open,
+    PickUp,
+    Dump,
+    Swap,
+    End,
+    North,
+    South,
+    East,
+    West,
+    Up,
+    Down
 }

@@ -1,7 +1,6 @@
-﻿namespace SixKeysOfTangrin
+﻿namespace SixKeysOfTangrin;
+
+public interface IGame
 {
-    public interface IGame
-    {
-        void Start();
-    }
+    void Start();
 }

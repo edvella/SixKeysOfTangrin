@@ -1,12 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿namespace SixKeysOfTangrin.Effects;
 
-namespace SixKeysOfTangrin.Effects
+public class Suspense : ISuspense
 {
-    public class Suspense : ISuspense
+    public void Delay(int millisecods)
     {
-        public void Delay(int millisecods)
-        {
-            Task.Delay(1000); 
-        }
+        Task.Delay(1000);
     }
 }

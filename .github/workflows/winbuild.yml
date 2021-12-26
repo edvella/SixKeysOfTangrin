@@ -15,7 +15,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: 5.0.x
+          dotnet-version: 6.0.x
       - name: Restore dependencies
         run: dotnet restore
       - name: Build
@@ -26,7 +26,8 @@ jobs:
         run: dotnet publish --configuration Release --no-build --no-restore
       - uses: papeloto/action-zip@v1
         with:
-          files: D:\a\SixKeysOfTangrin\SixKeysOfTangrin\SixKeysOfTangrin\bin\Release\net5.0\publish\
+          files: |
+            ${{ github.workspace }}\SixKeysOfTangrin\bin\Release\net6.0\publish\
           dest: SixKeysOfTangrin.zip
       - name: Release
         uses: "marvinpinto/action-automatic-releases@latest"
@@ -34,4 +35,4 @@ jobs:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: false
           files: |
-            ${{ github.workspace }}/SixKeysOfTangrin.zip
+            ${{ github.workspace }}\SixKeysOfTangrin.zip

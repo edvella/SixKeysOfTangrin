@@ -1,7 +1,6 @@
-﻿namespace Edvella.Components
+﻿namespace Edvella.Components;
+
+public interface IMessage
 {
-    public interface IMessage
-    {
-        object Render(string text);
-    }
+    object Render(string text);
 }

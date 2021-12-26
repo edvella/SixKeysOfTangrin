@@ -1,149 +1,144 @@
-﻿using Edvella.Devices;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿namespace SixKeysOfTangrin;
 
-namespace SixKeysOfTangrin
+public class TangrinMap : IMap
 {
-    public class TangrinMap : IMap
+    public const int Locations = 30;
+
+    public const int Exits = 6;
+
+    public const int StartingLocation = 0;
+
+    private const int connections = 33;
+
+    private readonly int?[,] locations = new int?[Locations, 6];
+
+    private readonly IRandomGenerator rnd;
+    private readonly IOutputDevice outputDevice;
+
+    private readonly Containers containers = new();
+    public IEnumerable<int?> Containers() { return containers.ItemLocations(); }
+
+    private readonly ContainerContent containerContent = new();
+    public ContainerContent ContainerContent() { return containerContent; }
+
+    public readonly ItemCollection itemCollection = new();
+    public ItemCollection Items() { return itemCollection; }
+
+    public int LocationCount => locations.GetLength(0);
+
+    public int MaxExitsPerLocation => locations.GetLength(1);
+
+    public int PlayerLocation { get; set; }
+
+    public const string NextToARockText = "Next to a rock";
+    public const string AgainstAWallText = "Against a wall";
+    public const string OnTheGroundText = "On the ground";
+    public const string ReflectingInYourTorchlightText = "Reflecting in your torchlight";
+    public const string ExitsText = "You can now go : ";
+    public const string InvalidDirectionText = "Can't go that way";
+    public const string GotOutWithTreasureText = "You got out with the treasure.";
+
+    public const string North = "north ";
+    public const string East = "east ";
+    public const string Up = "up ";
+    public const string South = "south ";
+    public const string West = "west ";
+    public const string Down = "down ";
+
+    public TangrinMap(
+        IRandomGenerator randomGenerator,
+        IOutputDevice outputDevice)
     {
-        public const int Locations = 30;
+        rnd = randomGenerator;
+        this.outputDevice = outputDevice;
+    }
 
-        public const int Exits = 6;
+    public void Initialise()
+    {
+        for (int i = 0; i < connections; i++)
+            PlaceTwoWayConnection(
+                rnd.Next(Locations),
+                RandomExit(),
+                RandomDestination());
 
-        public const int StartingLocation = 0;
+        AddAtLeastOneConnectionPerLocation();
 
-        private const int connections = 33;
+        containers.ScatterAroundMap();
+        containerContent.ScatterAroundMap();
+        itemCollection.ScatterAroundMap();
 
-        private readonly int?[,] locations = new int?[Locations, 6];
+        PlayerLocation = StartingLocation;
+    }
 
-        private readonly IRandomGenerator rnd;
-        private readonly IOutputDevice outputDevice;
+    private int RandomExit()
+    {
+        return rnd.Next(Exits);
+    }
 
-        private readonly Containers containers = new();
-        public IEnumerable<int?> Containers() { return containers.ItemLocations(); }
+    private int RandomDestination()
+    {
+        return rnd.Next(1, Locations);
+    }
 
-        private readonly ContainerContent containerContent = new();
-        public ContainerContent ContainerContent() { return containerContent; }
+    public void PlaceTwoWayConnection(
+        int x, int y, int destination, bool fixedLocation = false)
+    {
+        if (x < 0 || x >= Locations || y < 0 || y >= Exits)
+            throw new ConnectionOutOfMapException();
 
-        public readonly ItemCollection itemCollection = new();
-        public ItemCollection Items() { return itemCollection; }
-
-        public int LocationCount => locations.GetLength(0);
-
-        public int MaxExitsPerLocation => locations.GetLength(1);
-
-        public int PlayerLocation { get; set; }
-
-        public const string NextToARockText = "Next to a rock";
-        public const string AgainstAWallText = "Against a wall";
-        public const string OnTheGroundText = "On the ground";
-        public const string ReflectingInYourTorchlightText = "Reflecting in your torchlight";
-        public const string ExitsText = "You can now go : ";
-        public const string InvalidDirectionText = "Can't go that way";
-        public const string GotOutWithTreasureText = "You got out with the treasure.";
-
-        public const string North = "north ";
-        public const string East = "east ";
-        public const string Up = "up ";
-        public const string South = "south ";
-        public const string West = "west ";
-        public const string Down = "down ";
-
-        public TangrinMap(
-            IRandomGenerator randomGenerator,
-            IOutputDevice outputDevice)
+        if (CanConnect(x, y, destination))
         {
-            rnd = randomGenerator;
-            this.outputDevice = outputDevice;
+            locations[x, y] = destination;
+            locations[destination, OppositeDirection(y)] = x;
         }
-
-        public void Initialise()
+        else
         {
-            for (int i = 0; i < connections; i++)
+            PlaceTwoWayConnection(
+                fixedLocation ? x : rnd.Next(Locations),
+                RandomExit(),
+                RandomDestination(),
+                fixedLocation);
+        }
+    }
+
+    private bool CanConnect(int x, int y, int destination)
+    {
+        return !DestinationLocation(x, y).HasValue &&
+            !DestinationLocation(destination, OppositeDirection(y)).HasValue &&
+            x != destination;
+    }
+
+    public int? DestinationLocation(int x, int y)
+    {
+        return locations[x, y];
+    }
+
+    private void AddAtLeastOneConnectionPerLocation()
+    {
+        for (var x = 0; x < Locations; x++)
+        {
+            var caveConnections = 0;
+            for (var y = 0; y < Exits; y++)
+                if (DestinationLocation(x, y).HasValue) caveConnections++;
+
+            if (caveConnections == 0)
                 PlaceTwoWayConnection(
-                    rnd.Next(Locations),
-                    RandomExit(),
-                    RandomDestination());
-
-            AddAtLeastOneConnectionPerLocation();
-
-            containers.ScatterAroundMap();
-            containerContent.ScatterAroundMap();
-            itemCollection.ScatterAroundMap();
-
-            PlayerLocation = StartingLocation;
-        }
-
-        private int RandomExit()
-        {
-            return rnd.Next(Exits);
-        }
-
-        private int RandomDestination()
-        {
-            return rnd.Next(1, Locations);
-        }
-
-        public void PlaceTwoWayConnection(
-            int x, int y, int destination, bool fixedLocation = false)
-        {
-            if (x < 0 || x >= Locations || y < 0 || y >= Exits)
-                throw new ConnectionOutOfMapException();
-
-            if (CanConnect(x, y, destination))
-            {
-                locations[x, y] = destination;
-                locations[destination, OppositeDirection(y)] = x;
-            }
-            else
-            {
-                PlaceTwoWayConnection(
-                    fixedLocation ? x : rnd.Next(Locations),
+                    x,
                     RandomExit(),
                     RandomDestination(),
-                    fixedLocation);
-            }
+                    true);
         }
+    }
 
-        private bool CanConnect(int x, int y, int destination)
-        {
-            return !DestinationLocation(x, y).HasValue &&
-                !DestinationLocation(destination, OppositeDirection(y)).HasValue &&
-                x != destination;
-        }
+    public static int OppositeDirection(int y)
+    {
+        if (y < 3) return y + 3;
 
-        public int? DestinationLocation(int x, int y)
-        {
-            return locations[x, y];
-        }
+        return y - 3;
+    }
 
-        private void AddAtLeastOneConnectionPerLocation()
-        {
-            for (var x = 0; x < Locations; x++)
-            {
-                var caveConnections = 0;
-                for (var y = 0; y < Exits; y++)
-                    if (DestinationLocation(x, y).HasValue) caveConnections++;
-
-                if (caveConnections == 0)
-                    PlaceTwoWayConnection(
-                        x,
-                        RandomExit(),
-                        RandomDestination(),
-                        true);
-            }
-        }
-
-        public static int OppositeDirection(int y)
-        {
-            if (y < 3) return y + 3;
-
-            return y - 3;
-        }
-
-        public static readonly string[] caveDescriptions =
-        {
+    public static readonly string[] caveDescriptions =
+    {
             "You are under a cliff, near an old house. A cave faces you.",
             "Ahead of you lies an underground stream, but you can cross it.",
             "You are in a low chamber and must crawl on hands and knees.",
@@ -176,8 +171,8 @@ namespace SixKeysOfTangrin
             "You pass through an old school room, still with desks."
         };
 
-        public static readonly string[] items =
-        {
+    public static readonly string[] items =
+    {
             "a small red box",
             "a wooden cupboard",
             "a large briefcase",
@@ -212,121 +207,120 @@ namespace SixKeysOfTangrin
             "A huge shell"
         };
 
-        public void VisibleItem()
+    public void VisibleItem()
+    {
+        if (ItemInCurrentLocation() != ItemCollection.Nothing)
         {
-            if (ItemInCurrentLocation() != ItemCollection.Nothing)
+            if (rnd.NextDouble(1) > .95)
             {
-                if (rnd.NextDouble(1) > .95)
+                for (var i = 0; i < LocationCount; i++)
                 {
-                    for (var i = 0; i < LocationCount; i++)
+                    if (Items().ItemLocations().ElementAt(i) == ItemCollection.Nothing)
                     {
-                        if (Items().ItemLocations().ElementAt(i) == ItemCollection.Nothing)
-                        {
-                            Items().UpdateItem(PlayerLocation, 6);
-                            break;
-                        }
+                        Items().UpdateItem(PlayerLocation, 6);
+                        break;
                     }
                 }
-
-                outputDevice.ShowMessage(
-                    $"{VisibleItemLocation()} is {ItemInCurrentLocationDescription()}.");
             }
-        }
 
-        public string ItemInCurrentLocationDescription()
+            outputDevice.ShowMessage(
+                $"{VisibleItemLocation()} is {ItemInCurrentLocationDescription()}.");
+        }
+    }
+
+    public string ItemInCurrentLocationDescription()
+    {
+        return items[ItemInCurrentLocation()];
+    }
+
+    public string ItemDescription(int index)
+    {
+        return items[index];
+    }
+
+    public int ItemInCurrentLocation()
+    {
+        return Items().ItemLocations().ElementAt(PlayerLocation).Value;
+    }
+
+    private string VisibleItemLocation()
+    {
+        if (rnd.NextDouble(1.0) < .3) return NextToARockText;
+        if (rnd.NextDouble(2.0) < .3) return AgainstAWallText;
+        if (rnd.NextDouble(2.0) < .3) return OnTheGroundText;
+
+        return ReflectingInYourTorchlightText;
+    }
+
+    public string LookCommand()
+    {
+        return caveDescriptions[PlayerLocation];
+    }
+
+    public string CurrentExits()
+    {
+        var exits = new StringBuilder();
+        if (locations[PlayerLocation, 0].HasValue) exits.Append(North);
+        if (locations[PlayerLocation, 1].HasValue) exits.Append(East);
+        if (locations[PlayerLocation, 2].HasValue) exits.Append(Up);
+        if (locations[PlayerLocation, 3].HasValue) exits.Append(South);
+        if (locations[PlayerLocation, 4].HasValue) exits.Append(West);
+        if (locations[PlayerLocation, 5].HasValue) exits.Append(Down);
+
+        return $"{ExitsText}{exits}\n";
+    }
+
+    public bool GoNorth()
+    {
+        return Go(0);
+    }
+
+    public bool GoEast()
+    {
+        return Go(1);
+    }
+
+    public bool GoUp()
+    {
+        return Go(2);
+    }
+
+    public bool GoSouth()
+    {
+        return Go(3);
+    }
+
+    public bool GoWest()
+    {
+        return Go(4);
+    }
+
+    public bool GoDown()
+    {
+        return Go(5);
+    }
+
+    private bool Go(int direction)
+    {
+        if (DestinationLocation(PlayerLocation, direction) != null)
         {
-            return items[ItemInCurrentLocation()];
+            PlayerLocation = DestinationLocation(PlayerLocation, direction).Value;
+            return true;
         }
-
-        public string ItemDescription(int index)
+        else
         {
-            return items[index];
+            outputDevice.ShowMessage(InvalidDirectionText);
+            return false;
         }
+    }
 
-        public int ItemInCurrentLocation()
-        {
-            return Items().ItemLocations().ElementAt(PlayerLocation).Value;
-        }
+    public void RemoveItemFromCurrentLocation()
+    {
+        Items().UpdateItem(PlayerLocation, ItemCollection.Nothing);
+    }
 
-        private string VisibleItemLocation()
-        {
-            if (rnd.NextDouble(1.0) < .3) return NextToARockText;
-            if (rnd.NextDouble(2.0) < .3) return AgainstAWallText;
-            if (rnd.NextDouble(2.0) < .3) return OnTheGroundText;
-
-            return ReflectingInYourTorchlightText;
-        }
-
-        public string LookCommand()
-        {
-            return caveDescriptions[PlayerLocation];
-        }
-
-        public string CurrentExits()
-        {
-            var exits = new StringBuilder();
-            if (locations[PlayerLocation, 0].HasValue) exits.Append(North);
-            if (locations[PlayerLocation, 1].HasValue) exits.Append(East);
-            if (locations[PlayerLocation, 2].HasValue) exits.Append(Up);
-            if (locations[PlayerLocation, 3].HasValue) exits.Append(South);
-            if (locations[PlayerLocation, 4].HasValue) exits.Append(West);
-            if (locations[PlayerLocation, 5].HasValue) exits.Append(Down);
-
-            return $"{ExitsText}{exits}\n";
-        }
-
-        public bool GoNorth()
-        {
-            return Go(0);
-        }
-
-        public bool GoEast()
-        {
-            return Go(1);
-        }
-
-        public bool GoUp()
-        {
-            return Go(2);
-        }
-
-        public bool GoSouth()
-        {
-            return Go(3);
-        }
-
-        public bool GoWest()
-        {
-            return Go(4);
-        }
-
-        public bool GoDown()
-        {
-            return Go(5);
-        }
-
-        private bool Go(int direction)
-        {
-            if (DestinationLocation(PlayerLocation, direction) != null)
-            {
-                PlayerLocation = DestinationLocation(PlayerLocation, direction).Value;
-                return true;
-            }
-            else
-            {
-                outputDevice.ShowMessage(InvalidDirectionText);
-                return false;
-            }
-        }
-
-        public void RemoveItemFromCurrentLocation()
-        {
-            Items().UpdateItem(PlayerLocation, ItemCollection.Nothing);
-        }
-
-        public void AddItemToCurrentLocation(int item)
-        {
-            Items().UpdateItem(PlayerLocation, item);
-        }
+    public void AddItemToCurrentLocation(int item)
+    {
+        Items().UpdateItem(PlayerLocation, item);
     }
 }

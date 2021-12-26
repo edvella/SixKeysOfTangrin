@@ -1,8 +1,7 @@
-﻿namespace Edvella.Devices
+﻿namespace Edvella.Devices;
+
+public enum YesNo
 {
-    public enum YesNo
-    {
-        No,
-        Yes
-    }
+    No,
+    Yes
 }

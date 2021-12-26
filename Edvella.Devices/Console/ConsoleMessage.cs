@@ -1,12 +1,9 @@
-﻿using Edvella.Components;
+﻿namespace Edvella.Devices.Console;
 
-namespace Edvella.Devices.Console
+public class ConsoleMessage : IMessage
 {
-    public class ConsoleMessage : IMessage
+    public object Render(string text)
     {
-        public object Render(string text)
-        {
-            return text;
-        }
+        return text;
     }
 }

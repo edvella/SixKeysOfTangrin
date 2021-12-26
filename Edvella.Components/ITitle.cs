@@ -1,7 +1,6 @@
-﻿namespace Edvella.Components
+﻿namespace Edvella.Components;
+
+public interface ITitle : IMessage
 {
-    public interface ITitle : IMessage
-    {
-        
-    }
+
 }

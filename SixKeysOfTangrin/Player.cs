@@ -1,59 +1,58 @@
-﻿namespace SixKeysOfTangrin
+﻿namespace SixKeysOfTangrin;
+
+public class Player : IPlayer
 {
-    public class Player : IPlayer
+    public const string Exhausted = "YOU ARE EXTREMELY EXHAUSTED";
+    public const string Died = "YOU HAVE BECOME A VICTIM OF THE CAVES ON TANGRIN";
+    public const string Weary = "YOU ARE VERY WEARY, AND MUST GET OUT FAST";
+    public const string Tired = "YOU ARE GETTING TIRED - YOU SHOULD THINK OF RETURNING";
+    public const string Peckish = "YOU ARE STILL QUITE FIT, BUT GETTING PECKISH";
+    public const string LessStrong = "YOU ARE NOT QUITE AS STRONG NOW";
+    public const string Strong = "YOU ARE STRONG ENOUGH TO TACKLE ANYTHING";
+    public const string Efficient = "YOU ARE AT 100% EFFICIENCY";
+    public const string FullStrength = "YOU ARE AT MAXIMUM STRENGTH - MAKE THE MOST OF IT";
+
+    public const int FullEnergy = 99;
+
+    public int Energy { get; set; } = FullEnergy;
+
+    public int EnergyLeft()
     {
-        public const string Exhausted = "YOU ARE EXTREMELY EXHAUSTED";
-        public const string Died = "YOU HAVE BECOME A VICTIM OF THE CAVES ON TANGRIN";
-        public const string Weary = "YOU ARE VERY WEARY, AND MUST GET OUT FAST";
-        public const string Tired = "YOU ARE GETTING TIRED - YOU SHOULD THINK OF RETURNING";
-        public const string Peckish = "YOU ARE STILL QUITE FIT, BUT GETTING PECKISH";
-        public const string LessStrong = "YOU ARE NOT QUITE AS STRONG NOW";
-        public const string Strong = "YOU ARE STRONG ENOUGH TO TACKLE ANYTHING";
-        public const string Efficient = "YOU ARE AT 100% EFFICIENCY";
-        public const string FullStrength = "YOU ARE AT MAXIMUM STRENGTH - MAKE THE MOST OF IT";
+        return Energy;
+    }
 
-        public const int FullEnergy = 99;
+    public string EnergyStatus()
+    {
+        if (IsDead()) return $"{Exhausted}\n{Died}";
+        if (Energy < 10) return Exhausted;
+        if (Energy < 20) return Weary;
+        if (Energy < 30) return Tired;
+        if (Energy < 40) return Peckish;
+        if (Energy < 50) return null;
+        if (Energy < 60) return LessStrong;
+        if (Energy < 80) return Strong;
+        if (Energy < 90) return Efficient;
 
-        public int Energy { get; set; } = FullEnergy;
+        return FullStrength;
+    }
 
-        public int EnergyLeft()
-        {
-            return Energy;
-        }
+    public void Restore(int amount)
+    {
+        Energy += amount;
+    }
 
-        public string EnergyStatus()
-        {
-            if (IsDead()) return $"{Exhausted}\n{Died}";
-            if (Energy < 10) return Exhausted;
-            if (Energy < 20) return Weary;
-            if (Energy < 30) return Tired;
-            if (Energy < 40) return Peckish;
-            if (Energy < 50) return null;
-            if (Energy < 60) return LessStrong;
-            if (Energy < 80) return Strong;
-            if (Energy < 90) return Efficient;
+    public void RestoreFullHealth()
+    {
+        Energy = FullEnergy;
+    }
 
-            return FullStrength;
-        }
+    public void Drain(int tideTime)
+    {
+        Energy -= (410 - tideTime) / 95;
+    }
 
-        public void Restore(int amount)
-        {
-            Energy += amount;
-        }
-
-        public void RestoreFullHealth()
-        {
-            Energy = FullEnergy;
-        }
-
-        public void Drain(int tideTime)
-        {
-            Energy -= (410 - tideTime) / 95;
-        }
-
-        public bool IsDead()
-        {
-            return Energy < 2;
-        }
+    public bool IsDead()
+    {
+        return Energy < 2;
     }
 }

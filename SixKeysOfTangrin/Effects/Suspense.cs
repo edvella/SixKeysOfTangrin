@@ -4,6 +4,6 @@ public class Suspense : ISuspense
 {
     public void Delay(int millisecods)
     {
-        Task.Delay(1000);
+        Thread.Sleep(millisecods);
     }
 }

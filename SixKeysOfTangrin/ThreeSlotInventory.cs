@@ -209,7 +209,7 @@ public class ThreeSlotInventory : IInventory
             if (matchingKey >= 0)
             {
                 outputdevice.ShowMessage(string.Format(CorrectKeyText, ItemDescriptionWithoutArticle(matchingKey)));
-                suspense.Delay(1000);
+                suspense.Delay(3000);
                 outputdevice.Clear();
                 outputdevice.ShowMessage($"{ContainerContentText}{map.ItemDescription(UnlockedContainerContent())}");
                 var isContainerActioned = false;

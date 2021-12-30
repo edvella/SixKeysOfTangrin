@@ -158,7 +158,7 @@ but he only speaks French";
         if (TideTime < -100) TideTime = TideOutDuration;
         outputDevice.ShowMessage(Map.LookCommand());
         Map.VisibleItem();
-        suspense.Delay(1000);
+        suspense.Delay(1500);
 
         TangrinScene();
         PlayerMove();
@@ -169,7 +169,7 @@ but he only speaks French";
         if (rnd.NextDouble() > .9857)
         {
             outputDevice.ShowMessage(MeetTangrinText);
-            suspense.Delay(4000);
+            suspense.Delay(5000);
             outputDevice.Clear();
 
             if (inventory.IsHolding(ItemCollection.Dictionary))
@@ -196,7 +196,7 @@ but he only speaks French";
                             TangrinStealsText,
                             Map.ItemDescription(inventory.Item(slot))));
                     inventory.Remove(slot);
-                    suspense.Delay(1000);
+                    suspense.Delay(2000);
                     outputDevice.ShowMessage(TangrinThanksText);
                 }
             }

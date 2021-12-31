@@ -209,20 +209,11 @@ public class TangrinMap : IMap
 
     public void VisibleItem()
     {
+        if (ItemInCurrentLocation() == ItemCollection.Nothing && rnd.NextDouble(1) > .95)
+            Items().UpdateItem(PlayerLocation, ItemCollection.TinOfFood);
+
         if (ItemInCurrentLocation() != ItemCollection.Nothing)
         {
-            if (rnd.NextDouble(1) > .95)
-            {
-                for (var i = 0; i < LocationCount; i++)
-                {
-                    if (Items().ItemLocations().ElementAt(i) == ItemCollection.Nothing)
-                    {
-                        Items().UpdateItem(PlayerLocation, 6);
-                        break;
-                    }
-                }
-            }
-
             outputDevice.ShowMessage(
                 $"{VisibleItemLocation()} is {ItemInCurrentLocationDescription()}.");
         }
